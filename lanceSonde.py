@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Suppression des Warning URLLIB3
 import urllib3
@@ -67,6 +68,8 @@ fileWrite.close()
 # Gestion du graphique
 ############################################################
 
+
+
 # Chargement des données pour l'axe Y
 for cle in data:
     labels.append(cle['heure'])
@@ -75,8 +78,15 @@ for cle in data:
 for cle in data:
     Tdr.append(cle['Tdr'])
 
+# Calcul la moyenne totale depuis toutes les données
+tabTdr = np.array(Tdr)
+moyTdf = np.mean(tabTdr) # Moyenne de toutes les données
+
+# Mise en place du Titre du Graphique avec le host sondé
+plt.title(host + " - " + str(round(moyTdf)) + " ms") 
+
 # Graphique avec des petits traits et des bulles
-plt.plot(labels,Tdr, marker='o', linestyle='dashed')
+plt.plot(labels,Tdr, marker='o', linestyle='dashed',markerfacecolor='green')
 
 # Nom des axes
 plt.ylabel('Temps de réponse (ms)')
@@ -89,10 +99,11 @@ ax.relim()
 ## update ax.viewLim using the new dataLim
 ax.autoscale_view()
 
+# Affichage de la grille
+plt.grid(True)  
 
-plt.grid(True)  # Affichage de la grille
-
-plt.savefig("Graphique.png", dpi=300)  # Sauvegarde en png avec un dpi de 300
+# Sauvegarde en png avec un dpi de 300
+plt.savefig("Graphique.png", dpi=300)  
 
 plt.show()
 #
