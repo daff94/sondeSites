@@ -1,0 +1,8 @@
+/.idea/
+/.pdm.toml
+/.venv/
+/.vscode/
+/certificats/
+.pdm-python
+**/__pycache__/
+__init__.py
