@@ -88,6 +88,11 @@ ax = plt.gca()
 ax.relim()
 ## update ax.viewLim using the new dataLim
 ax.autoscale_view()
-#
+
+
+plt.grid(True)  # Affichage de la grille
+
+plt.savefig("Graphique.png", dpi=300)  # Sauvegarde en png avec un dpi de 300
+
 plt.show()
 #
