@@ -80,10 +80,12 @@ for cle in data:
 
 # Calcul la moyenne totale depuis toutes les données
 tabTdr = np.array(Tdr)
+minTdr = np.min(Tdr)
+maxTdr = np.max(Tdr)
 moyTdf = np.mean(tabTdr) # Moyenne de toutes les données
 
 # Mise en place du Titre du Graphique avec le host sondé
-plt.title(host + " - " + str(round(moyTdf)) + " ms") 
+plt.title(host + "\n" + str(round(moyTdf)) + " ms " +  " - " + str(round(minTdr)) + " ms " + " - "+ str(round(maxTdr)) + " ms")
 
 # Graphique avec des petits traits et des bulles
 plt.plot(labels,Tdr, marker='o', linestyle='dashed',markerfacecolor='green')
