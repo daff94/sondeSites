@@ -5,6 +5,8 @@ import requests
 import datetime
 import json
 
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 
 # Suppression des Warning URLLIB3
@@ -12,7 +14,13 @@ import urllib3
 urllib3.disable_warnings()
 
 
-fichierDATA = "sondeSite.json"
+SufixeDATA = "sondeSite.json"
+host="https://myriamdupouy.com"
+PrefixeDATA = "myriamdupouycom_"
+fichierDATA = PrefixeDATA + SufixeDATA
+
+labels = json.loads("[]")
+Tdr = json.loads("[]")
 
 def pingsite(hostanalyse):
     debut = time.time()
@@ -20,16 +28,23 @@ def pingsite(hostanalyse):
     r = requests.get(hostanalyse,verify=False)
     fin = time.time()
     duree = round((fin - debut)*1000) 
-    print("Temps de réponse du site : " + hostanalyse + " - " + str(duree) + "ms")
+    #print("Temps de réponse du site : " + hostanalyse + " - " + str(duree) + "ms")
     return duree, r.status_code
 
-# Récuépration des valeurs depuis un fichier de données
+print(fichierDATA)
+
+# Controle si le fichier source existe, sinon il est créé avec un [] (format json)
+my_file = Path(fichierDATA)
+if not my_file.is_file():
+    print("Le fichier existe PAS")
+    with open(fichierDATA, 'w') as fileWrite :   
+      fileWrite.write("[]")
+
+# Récupération des valeurs depuis un fichier de données
 print("Lecture des données depuis le fichier : " + fichierDATA)
 with open(fichierDATA, 'r') as file :   
    data = json.load(file) 
 file.close()
-
-host="https://myriamdupouy.com"
 
 Now = datetime.datetime.now()
 DateSonde = Now.strftime('%d/%m/%Y')
@@ -43,34 +58,36 @@ data.append({"host":host,"Tdr":dureetransaction,"Status":statuscode,"date":DateS
 
 # Transformation de la chaine de caractère en format list (json)
 dataJson = json.dumps(data)
-
 # Ecriture dans le fichier de données avec la nouvelle occurence
 with open(fichierDATA, 'w') as fileWrite :   
    fileWrite.write(str(dataJson))
 fileWrite.close()
 
-# Affichage des données uniquement pour la clé "Tdr" (Temps de Réponse)
-#for cle in data:
-#    print(cle['Tdr'])
-
-
+############################################################
 # Gestion du graphique
+############################################################
 
-labels = ['03:14', '043:14', '05:14', '06:14', '07:14']
-Tdr = [230,540,1230,580,344]
+# Chargement des données pour l'axe Y
+for cle in data:
+    labels.append(cle['heure'])
 
-#plt.plot(labels,Tdr, marker='o', linestyle='dashed')
+# Chargement des données pour l'axe X
+for cle in data:
+    Tdr.append(cle['Tdr'])
 
-#plt.ylabel('Temps de réponse (ms)')
-#plt.xlabel('Heure')
+# Graphique avec des petits traits et des bulles
+plt.plot(labels,Tdr, marker='o', linestyle='dashed')
+
+# Nom des axes
+plt.ylabel('Temps de réponse (ms)')
+plt.xlabel('Heure')
 #
-#ax = plt.gca()
+ax = plt.gca()
 #
 ## recompute the ax.dataLim
-#ax.relim()
+ax.relim()
 ## update ax.viewLim using the new dataLim
-#ax.autoscale_view()
-##plt.draw()
+ax.autoscale_view()
 #
-#plt.show()
+plt.show()
 #
