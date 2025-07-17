@@ -28,6 +28,8 @@ print(TimestanpSonde)
 with open('sondeSite.json', 'r') as file :   
    data = json.load(file) 
 
+file.close()
+
 # Affiche le type de la liste = LIST au sens python
 print(type(data))
 
@@ -39,6 +41,13 @@ data.append({"host":"xxx.com","Tdr":0,"Status":0,"date":"17/07/2025","heure":"03
 
 # Affichage de la liste avec l'élément inseré ci-avant
 print(data)
+
+dataJson = json.dumps(data)
+
+with open('sondeSite_new.json', 'w') as fileWrite :   
+   fileWrite.write(str(dataJson))
+
+fileWrite.close()
 
 # Affichage des données uniquement pour la clé "Tdr" (Temps de Réponse)
 for cle in data:
