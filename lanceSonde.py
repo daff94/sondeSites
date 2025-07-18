@@ -28,10 +28,17 @@ proxies = {
             }
 
 SufixeDATA = "sondeSite.json"
-host="https://myriamdupouy.com"
-PrefixeDATA = "myriamdupouycom_"
-fichierDATA = PrefixeDATA + SufixeDATA
+SufixeGRAPH = "graph"
 
+if WORKING_IN_GP:
+    host="https://testkube-enterprise-ui.dev.etat-ge.ch/"
+    PrefixeDATA = "testkub_dev_"
+    fichierDATA = PrefixeDATA + SufixeDATA
+else:
+    host="https://myriamdupouy.com"
+    PrefixeDATA = "myriamdupouycom_"
+    fichierDATA = PrefixeDATA + SufixeDATA
+    
 labels = json.loads("[]")
 Tdr = json.loads("[]")
 
@@ -45,8 +52,6 @@ def pingsite(hostanalyse):
     duree = round((fin - debut)*1000) 
     #print("Temps de réponse du site : " + hostanalyse + " - " + str(duree) + "ms")
     return duree, r.status_code
-
-print(fichierDATA)
 
 # Controle si le fichier source existe, sinon il est créé avec un [] (format json)
 my_file = Path(fichierDATA)
@@ -101,8 +106,10 @@ moyTdf = np.mean(tabTdr) # Moyenne de toutes les données
 # Mise en place du Titre du Graphique avec le host sondé
 plt.title(host + "\n" + str(round(moyTdf)) + " ms " +  " - " + str(round(minTdr)) + " ms " + " - "+ str(round(maxTdr)) + " ms")
 
+plt.plot([2000,2000])
+
 # Graphique avec des petits traits et des bulles
-plt.plot(labels,Tdr, marker='o', linestyle='dashed',markerfacecolor='green')
+plt.plot(labels,Tdr, marker='o', linestyle='dashed',markerfacecolor='green',linewidth=1)
 
 # Nom des axes
 plt.ylabel('Temps de réponse (ms)')
@@ -119,7 +126,7 @@ ax.autoscale_view()
 plt.grid(True)  
 
 # Sauvegarde en png avec un dpi de 300
-plt.savefig("Graphique.png", dpi=300)  
+plt.savefig(PrefixeDATA + SufixeGRAPH + ".png", dpi=300)  
 
 plt.show()
 #
