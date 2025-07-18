@@ -9,11 +9,21 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.interpolate import interp1d
 
 # Suppression des Warning URLLIB3
 import urllib3
 urllib3.disable_warnings()
 
+http_proxy  = "http://127.0.0.1:3128"
+https_proxy = "http://127.0.0.1:3128"
+ftp_proxy   = "ftp://127.0.0.1:3128"
+
+proxies = { 
+              "http"  : http_proxy, 
+              "https" : https_proxy, 
+              "ftp"   : ftp_proxy
+            }
 
 SufixeDATA = "sondeSite.json"
 host="https://myriamdupouy.com"
@@ -25,8 +35,8 @@ Tdr = json.loads("[]")
 
 def pingsite(hostanalyse):
     debut = time.time()
-    #r = requests.get(hostanalyse, proxies=proxies, verify='FiddlerRoot.pem')
-    r = requests.get(hostanalyse,verify=False)
+    r = requests.get(hostanalyse, proxies=proxies, verify='FiddlerRoot.pem')
+    #r = requests.get(hostanalyse,verify=False)
     fin = time.time()
     duree = round((fin - debut)*1000) 
     #print("Temps de réponse du site : " + hostanalyse + " - " + str(duree) + "ms")
@@ -86,6 +96,7 @@ moyTdf = np.mean(tabTdr) # Moyenne de toutes les données
 
 # Mise en place du Titre du Graphique avec le host sondé
 plt.title(host + "\n" + str(round(moyTdf)) + " ms " +  " - " + str(round(minTdr)) + " ms " + " - "+ str(round(maxTdr)) + " ms")
+
 
 # Graphique avec des petits traits et des bulles
 plt.plot(labels,Tdr, marker='o', linestyle='dashed',markerfacecolor='green')
