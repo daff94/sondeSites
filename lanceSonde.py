@@ -9,7 +9,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.interpolate import interp1d
+import pandas as pd
 
 # Suppression des Warning URLLIB3
 import urllib3
