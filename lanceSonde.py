@@ -55,6 +55,7 @@ if not my_file.is_file():
     print("Le fichier existe PAS")
     with open(fichierDATA, 'w') as fileWrite :   
       fileWrite.write("[]")
+    fileWrite.close()
 
 # Récupération des valeurs depuis un fichier de données
 print("Lecture des données depuis le fichier : " + fichierDATA)
@@ -64,7 +65,8 @@ file.close()
 
 Now = datetime.datetime.now()
 DateSonde = Now.strftime('%m-%d-%Y')
-TimestanpSonde = Now.strftime('%I:%M')
+TimestanpSonde = Now.strftime('%H:%M')
+
 
 # Lancement de la requette pour connaitre le temps de réponse et status de la transaction
 dureetransaction, statuscode = pingsite(host)
