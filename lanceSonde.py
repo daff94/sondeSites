@@ -6,10 +6,6 @@ import datetime
 import json
 
 from pathlib import Path
-from scipy.interpolate import interp1d
-
-import matplotlib.pyplot as plt
-import numpy as np
 
 # Suppression des Warning URLLIB3
 import urllib3
@@ -82,52 +78,3 @@ dataJson = json.dumps(data)
 with open(fichierDATA, 'w') as fileWrite :   
    fileWrite.write(str(dataJson))
 fileWrite.close()
-
-############################################################
-# Gestion du graphique
-############################################################
-
-# Chargement des données pour l'axe Y
-for cle in data:
-    #labels.append(pd.to_datetime(cle['heure'], format='%H:%M'))
-    labels.append(cle['heure'])
-
-# Chargement des données pour l'axe X
-for cle in data:
-    Tdr.append(cle['Tdr'])
-
-
-# Calcul la moyenne totale depuis toutes les données
-tabTdr = np.array(Tdr)
-minTdr = np.min(Tdr)
-maxTdr = np.max(Tdr)
-moyTdf = np.mean(tabTdr) # Moyenne de toutes les données
-
-# Mise en place du Titre du Graphique avec le host sondé
-plt.title(host + "\n" + str(round(moyTdf)) + " ms " +  " - " + str(round(minTdr)) + " ms " + " - "+ str(round(maxTdr)) + " ms")
-
-# Affichage de la moyenne de l'ensemble des données
-plt.axhline(y=moyTdf, color='r', linestyle='--')
-
-# Graphique avec des petits traits et des bulles
-plt.plot(labels,Tdr, marker='o', linestyle='dashed',markerfacecolor='green',linewidth=1)
-
-# Nom des axes
-plt.ylabel('Temps de réponse (ms)')
-plt.xlabel('Heure')
-#
-ax = plt.gca()
-#
-## recompute the ax.dataLim
-ax.relim()
-## update ax.viewLim using the new dataLim
-ax.autoscale_view()
-
-# Affichage de la grille
-plt.grid(True)  
-
-# Sauvegarde en png avec un dpi de 300
-plt.savefig(PrefixeDATA + SufixeGRAPH + ".png", dpi=300)  
-
-plt.show()
-#
