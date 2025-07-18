@@ -10,7 +10,6 @@ from scipy.interpolate import interp1d
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 # Suppression des Warning URLLIB3
 import urllib3
@@ -85,9 +84,8 @@ fileWrite.close()
 
 # Chargement des données pour l'axe Y
 for cle in data:
-    labels.append(pd.to_datetime(cle['heure'], format='%H:%M'))
-
-print(labels)
+    #labels.append(pd.to_datetime(cle['heure'], format='%H:%M'))
+    labels.append(cle['heure'])
 
 # Chargement des données pour l'axe X
 for cle in data:
