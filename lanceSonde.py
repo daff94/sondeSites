@@ -6,6 +6,7 @@ import datetime
 import json
 
 from pathlib import Path
+from scipy.interpolate import interp1d
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,6 +15,8 @@ import pandas as pd
 # Suppression des Warning URLLIB3
 import urllib3
 urllib3.disable_warnings()
+
+WORKING_IN_GP = True
 
 http_proxy  = "http://127.0.0.1:3128"
 https_proxy = "http://127.0.0.1:3128"
@@ -35,8 +38,10 @@ Tdr = json.loads("[]")
 
 def pingsite(hostanalyse):
     debut = time.time()
-    r = requests.get(hostanalyse, proxies=proxies, verify='FiddlerRoot.pem')
-    #r = requests.get(hostanalyse,verify=False)
+    if WORKING_IN_GP:
+        r = requests.get(hostanalyse, proxies=proxies, verify='FiddlerRoot.pem')
+    else: 
+        r = requests.get(hostanalyse,verify=False)
     fin = time.time()
     duree = round((fin - debut)*1000) 
     #print("Temps de réponse du site : " + hostanalyse + " - " + str(duree) + "ms")
@@ -58,8 +63,8 @@ with open(fichierDATA, 'r') as file :
 file.close()
 
 Now = datetime.datetime.now()
-DateSonde = Now.strftime('%d/%m/%Y')
-TimestanpSonde = Now.strftime('%I:%M%p')
+DateSonde = Now.strftime('%m-%d-%Y')
+TimestanpSonde = Now.strftime('%I:%M')
 
 # Lancement de la requette pour connaitre le temps de réponse et status de la transaction
 dureetransaction, statuscode = pingsite(host)
@@ -78,15 +83,16 @@ fileWrite.close()
 # Gestion du graphique
 ############################################################
 
-
-
 # Chargement des données pour l'axe Y
 for cle in data:
-    labels.append(cle['heure'])
+    labels.append(pd.to_datetime(cle['heure'], format='%H:%M'))
+
+print(labels)
 
 # Chargement des données pour l'axe X
 for cle in data:
     Tdr.append(cle['Tdr'])
+
 
 # Calcul la moyenne totale depuis toutes les données
 tabTdr = np.array(Tdr)
@@ -96,7 +102,6 @@ moyTdf = np.mean(tabTdr) # Moyenne de toutes les données
 
 # Mise en place du Titre du Graphique avec le host sondé
 plt.title(host + "\n" + str(round(moyTdf)) + " ms " +  " - " + str(round(minTdr)) + " ms " + " - "+ str(round(maxTdr)) + " ms")
-
 
 # Graphique avec des petits traits et des bulles
 plt.plot(labels,Tdr, marker='o', linestyle='dashed',markerfacecolor='green')
