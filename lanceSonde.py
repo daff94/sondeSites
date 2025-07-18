@@ -106,7 +106,8 @@ moyTdf = np.mean(tabTdr) # Moyenne de toutes les données
 # Mise en place du Titre du Graphique avec le host sondé
 plt.title(host + "\n" + str(round(moyTdf)) + " ms " +  " - " + str(round(minTdr)) + " ms " + " - "+ str(round(maxTdr)) + " ms")
 
-plt.plot([2000,2000])
+# Affichage de la moyenne de l'ensemble des données
+plt.axhline(y=moyTdf, color='r', linestyle='--')
 
 # Graphique avec des petits traits et des bulles
 plt.plot(labels,Tdr, marker='o', linestyle='dashed',markerfacecolor='green',linewidth=1)
