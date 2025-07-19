@@ -21,7 +21,11 @@ class createGraph:
         self.nomHost = nomHost
         self.enregistrementGraph = enregistrementGraph
         self.chargerData()
-           
+
+    def time_to_seconds(self,time_str):
+        minutes, seconds = time_str.split(':')
+        return int(minutes) * 60 + int(seconds)
+            
     def chargerData(self):
             # Récupération des valeurs depuis un fichier de données
             print("Lecture des données depuis le fichier : " + self.fichierData)
@@ -33,7 +37,9 @@ class createGraph:
     def creationGraph(self):
         # Chargement des données pour l'axe Y
         for cle in self.dataGraph:
-            self.labels.append(cle['heure'])
+            # l'idee de passer avec des secondes c'était d'avoir une abscisse régulière
+            #self.labels.append(cle['heure'])
+            self.labels.append(self.time_to_seconds(cle['heure']))
 
         # Chargement des données pour l'axe X
         for cle in self.dataGraph:
