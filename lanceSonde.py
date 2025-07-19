@@ -31,8 +31,9 @@ if WORKING_IN_GP:
     PrefixeDATA = "testkub_dev_"
     fichierDATA = PrefixeDATA + SufixeDATA
 else:
+    dateData = str(datetime.datetime.now().year) + "_" + str(datetime.datetime.now().month) + "_" + str(datetime.datetime.now().day)
     host="https://myriamdupouy.com"
-    PrefixeDATA = "myriamdupouycom_"
+    PrefixeDATA = dateData + "_" + "myriamdupouycom_"
     fichierDATA = PrefixeDATA + SufixeDATA
     
 labels = json.loads("[]")
