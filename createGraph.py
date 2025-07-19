@@ -21,7 +21,8 @@ class createGraph:
         self.nomHost = nomHost
         self.enregistrementGraph = enregistrementGraph
         self.chargerData()
-
+        
+    # Option possible d'avoir l'heure des X en seconde au lieu HH:MM
     def time_to_seconds(self,time_str):
         minutes, seconds = time_str.split(':')
         return int(minutes) * 60 + int(seconds)
@@ -38,8 +39,8 @@ class createGraph:
         # Chargement des données pour l'axe Y
         for cle in self.dataGraph:
             # l'idee de passer avec des secondes c'était d'avoir une abscisse régulière
-            #self.labels.append(cle['heure'])
-            self.labels.append(self.time_to_seconds(cle['heure']))
+            self.labels.append(cle['heure']) # abscisse avec ls éléments de la liste, répartition auto
+            #self.labels.append(self.time_to_seconds(cle['heure'])) # abscisse en seconde
 
         # Chargement des données pour l'axe X
         for cle in self.dataGraph:
@@ -57,7 +58,7 @@ class createGraph:
         plt.axhline(y=moyTdf, color='r', linestyle='--')
 
         # Graphique avec des petits traits et des bulles
-        plt.plot(self.labels,self.Tdr, marker='o', linestyle='dashed',markerfacecolor='green',linewidth=1)
+        plt.plot(self.labels,self.Tdr, marker='.', linestyle='dashed',markerfacecolor='green',linewidth=1)
 
         # Nom des axes
         plt.ylabel('Temps de réponse (ms)')
