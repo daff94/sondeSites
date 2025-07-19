@@ -74,8 +74,8 @@ class createGraph:
         plt.show()
 
 
-nomfichierData = "testkub_dev_sondeSite.json"
-nonduSite = "testKup.dev.etat-ge.ch"
+nomfichierData = "myriamdupouycom_sondeSite.json"
+nonduSite = "myriamdupouy.art"
 
 # Chargement des données, création du graphique et enregistrement en local
 testgraph = createGraph(nomfichierData, nonduSite, True)

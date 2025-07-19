@@ -11,7 +11,7 @@ from pathlib import Path
 import urllib3
 urllib3.disable_warnings()
 
-WORKING_IN_GP = True
+WORKING_IN_GP = False
 
 http_proxy  = "http://127.0.0.1:3128"
 https_proxy = "http://127.0.0.1:3128"
